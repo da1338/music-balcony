@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>音乐阳台 · 白熊船长 × 棕熊海盗 双角色动态玩偶装置提案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0C0C;
+  --ink:#D7E2EA;
+  --sub:#8f9aa3;
+  --line:rgba(215,226,234,.16);
+  --red:#c8452f;
+  --amber:#e8a33c;
+  --card:#141414;
+  --maxw:1280px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased;
+}
+.wrap{overflow-x:clip}
+.grad{
+  background:linear-gradient(180deg,#646973 0%,#BBCCD7 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.inner{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* ---------- 顶部进度条 + 导航 ---------- */
+#bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;
+  background:linear-gradient(90deg,var(--red),var(--amber))}
+nav{position:fixed;top:0;left:0;right:0;z-index:90;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 28px;backdrop-filter:blur(10px);
+  background:linear-gradient(180deg,rgba(12,12,12,.92),rgba(12,12,12,0));
+  font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:500}
+nav .brand{color:var(--ink);font-weight:700}
+nav .brand i{color:var(--red);font-style:normal}
+nav ul{display:flex;gap:26px;list-style:none}
+nav a{color:var(--sub);text-decoration:none;transition:opacity .2s,color .2s}
+nav a:hover{color:var(--ink)}
+@media(max-width:820px){nav ul{display:none}}
+
+/* ---------- HERO ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  position:relative;overflow-x:clip;padding:0 0 34px}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 38%;opacity:.42;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.25) 78%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.25) 78%,transparent 100%)}
+.hero-bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 80% at 50% 0%,rgba(12,12,12,.15),rgba(12,12,12,.85) 70%)}
+.hero .inner{position:relative;z-index:2;width:100%}
+.kicker{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--amber);font-weight:700;
+  margin-bottom:18px}
+.hero h1{font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.86;
+  font-size:clamp(64px,13.5vw,196px);white-space:nowrap}
+.hero .sub{margin-top:14px;font-size:clamp(15px,1.9vw,24px);font-weight:300;color:var(--ink);
+  letter-spacing:.04em}
+.hero .sub b{font-weight:700;color:#fff}
+.herobar{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  margin-top:44px;padding-top:22px;border-top:1px solid var(--line);flex-wrap:wrap}
+.herobar .col{max-width:300px}
+.herobar .col h4{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--sub);
+  font-weight:700;margin-bottom:7px}
+.herobar .col p{font-size:15px;font-weight:300;line-height:1.6}
+.scrolltip{margin-top:34px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--sub)}
+
+/* ---------- 跑马灯 ---------- */
+.marquee{padding:76px 0 26px;overflow:hidden}
+.mq-row{display:flex;gap:14px;will-change:transform;margin-bottom:14px}
+.mq-row img{width:420px;height:262px;object-fit:cover;border-radius:20px;flex:none;
+  border:1px solid var(--line);filter:saturate(.92)}
+.mq-row.tall img{height:200px;width:300px}
+
+/* ---------- 通用节 ---------- */
+section{padding:96px 0}
+.sec-head{margin-bottom:44px}
+.sec-head .no{font-size:12px;letter-spacing:.3em;color:var(--red);font-weight:700;
+  text-transform:uppercase;display:block;margin-bottom:12px}
+h2{font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:.94;
+  font-size:clamp(44px,8.4vw,124px)}
+.lead{color:var(--sub);font-size:17px;font-weight:300;max-width:760px;margin-top:18px}
+.lead b{color:var(--ink);font-weight:500}
+
+/* 逐字显现 */
+.reveal p{font-size:clamp(17px,2vw,25px);font-weight:300;line-height:1.85;max-width:820px}
+.reveal .ch{opacity:.18;transition:opacity .35s ease}
+
+/* ---------- 数据条 ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:52px}
+.stats div{background:var(--bg);padding:26px 22px}
+.stats .n{font-size:clamp(30px,3.4vw,52px);font-weight:900;line-height:1;letter-spacing:-.02em}
+.stats .n em{font-style:normal;color:var(--amber)}
+.stats .t{font-size:12px;color:var(--sub);letter-spacing:.14em;margin-top:9px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- 编号列表（外观 / 造价） ---------- */
+.rows{max-width:1120px;margin:0 auto;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:132px 1fr;gap:30px;align-items:start;
+  padding:38px 0;border-bottom:1px solid var(--line)}
+.row .num{font-weight:900;font-size:clamp(46px,5.6vw,86px);line-height:.9;color:#2a2f36;
+  letter-spacing:-.03em}
+.row h3{font-size:clamp(21px,2.6vw,34px);font-weight:700;letter-spacing:.01em}
+.row h3 span{color:var(--sub);font-weight:300;font-size:.62em;margin-left:12px;letter-spacing:.06em}
+.row p{color:var(--sub);font-weight:300;font-size:16px;margin-top:12px;max-width:760px}
+.row p b{color:var(--ink);font-weight:500}
+@media(max-width:700px){.row{grid-template-columns:1fr;gap:8px}}
+
+/* ---------- 图片网格 ---------- */
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.g3 figure{margin:0;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.g3 img{width:100%;display:block}
+.g3 figcaption{font-size:12.5px;color:var(--sub);padding:11px 15px;border-top:1px solid var(--line)}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:40px}
+.g2 figure{margin:0;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.g2 img{width:100%;display:block}
+.g2 figcaption{font-size:13px;color:var(--sub);padding:12px 16px;border-top:1px solid var(--line)}
+@media(max-width:820px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+
+/* ---------- 白底造价节 ---------- */
+.light{background:#fff;color:#0C0C0C;border-radius:46px 46px 0 0;margin-top:-30px;
+  position:relative;z-index:5}
+.light .sec-head .no{color:var(--red)}
+.light h2{background:linear-gradient(180deg,#9aa3ac 0%,#0C0C0C 92%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.light .lead{color:#5c6470}
+.light .lead b{color:#0C0C0C}
+.light .row .num{color:#dfe3e8}
+.light .row p{color:#5c6470}
+.light .row p b{color:#0C0C0C}
+.light .stats{background:#e6e9ec}
+.light .stats div{background:#fff}
+.light .stats .t{color:#5c6470}
+
+/* ---------- 堆叠卡 ---------- */
+.stack{padding-bottom:40px}
+.cardwrap{height:92svh;position:relative}
+.card{position:sticky;top:13svh;border-radius:34px;overflow:hidden;
+  border:1px solid var(--line);background:var(--card);
+  display:grid;grid-template-columns:1.05fr .95fr;min-height:74svh;
+  transform-origin:50% 0;will-change:transform}
+.card .txt{padding:clamp(28px,4vw,58px);display:flex;flex-direction:column;justify-content:center}
+.card .tagx{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);
+  font-weight:700;margin-bottom:16px}
+.card h3{font-size:clamp(30px,3.6vw,54px);font-weight:900;line-height:1.02;letter-spacing:-.01em}
+.card .desc{color:var(--sub);font-weight:300;font-size:16.5px;margin-top:18px;max-width:460px}
+.card ul{margin-top:22px;list-style:none;display:flex;flex-wrap:wrap;gap:9px}
+.card li{font-size:12.5px;padding:6px 13px;border:1px solid var(--line);border-radius:99px;color:var(--ink)}
+.card .pics{display:grid;grid-template-rows:1fr 1fr;gap:1px;background:var(--line)}
+.card .pics img{width:100%;height:100%;object-fit:cover;background:#1b1b1b}
+.card .pics figure{margin:0;position:relative;overflow:hidden}
+.card .pics figcaption{position:absolute;left:14px;bottom:12px;font-size:12px;
+  color:#fff;background:rgba(12,12,12,.66);padding:5px 11px;border-radius:8px;backdrop-filter:blur(4px)}
+@media(max-width:900px){.card{grid-template-columns:1fr;min-height:0}
+  .card .pics{grid-template-rows:200px 200px}}
+
+/* ---------- 下一步 CTA ---------- */
+.cta{border-top:1px solid var(--line);padding-top:70px}
+.cta .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:40px}
+.cta .grid div{background:var(--bg);padding:28px 24px}
+.cta .grid .k{font-size:11px;letter-spacing:.24em;color:var(--red);font-weight:700;margin-bottom:12px}
+.cta .grid h5{font-size:18px;font-weight:700;margin-bottom:8px}
+.cta .grid p{font-size:14px;color:var(--sub);font-weight:300}
+@media(max-width:900px){.cta .grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.cta .grid{grid-template-columns:1fr}}
+
+footer{padding:56px 0 70px;border-top:1px solid var(--line);color:var(--sub);font-size:13px}
+footer .inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* ---------- 进场动画 ---------- */
+.fade{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.25,.1,.25,1),transform .8s cubic-bezier(.25,.1,.25,1)}
+.fade.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<nav>
+  <div class="brand">音乐阳台 <i>·</i> MUSIC BALCONY</div>
+  <ul>
+    <li><a href="#about">定位</a></li>
+    <li><a href="#cast">角色</a></li>
+    <li><a href="#fit">外皮驱动</a></li>
+    <li><a href="#deliver">设计交付</a></li>
+    <li><a href="#next">下一步</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-bg"><img src="概念图_城堡版_夜景正面仰视.png" alt="江上城堡二楼阳台夜景"></div>
+  <div class="inner">
+    <div class="kicker fade">商业街区 · 二层阳台动态装置提案</div>
+    <h1 class="grad fade">音乐阳台</h1>
+    <p class="sub fade">白熊船长 <b>×</b> 棕熊海盗 —— 双角色等身动态玩偶装置</p>
+    <div class="herobar fade">
+      <div class="col"><h4>场地</h4><p>江上城堡右侧翼二层外凸阳台，观众自楼下广场仰视</p></div>
+      <div class="col"><h4>规模</h4><p>白熊 1.70 m ／ 棕熊 1.60 m，合计 11 个独立动作</p></div>
+      <div class="col"><h4>形态</h4><p>小型舞台机械 ＋ 可动外皮，全部机构藏在毛皮之内</p></div>
+    </div>
+    <div class="scrolltip fade">向下滚动 · 查看完整方案</div>
+  </div>
+</header>
+
+<!-- ============ 跑马灯 ============ -->
+<div class="marquee" id="mq">
+  <div class="mq-row" data-dir="1">
+    <img src="概念图_城堡版_夜景正面仰视.png"><img src="IP分解_白熊_6关节.png">
+    <img src="概念图_城堡版_夜景右前45度.png"><img src="IP分解_棕熊_5关节.png">
+    <img src="概念图_城堡版_白天正面仰视.png">
+  </div>
+  <div class="mq-row tall" data-dir="-1">
+    <img src="IP分解_白熊_6关节.png"><img src="概念图_城堡版_夜景右前45度.png">
+    <img src="IP分解_棕熊_5关节.png"><img src="概念图_城堡版_白天正面仰视.png">
+  </div>
+</div>
+
+<!-- ============ 01 定位 ============ -->
+<section id="about">
+  <div class="inner">
+    <div class="sec-head">
+      <span class="no fade">01 / 定位</span>
+      <h2 class="grad fade">不止是会动的玩偶</h2>
+    </div>
+    <div class="reveal" id="rev">
+      <p data-text="这不是两个毛绒娃娃，而是一套小型舞台机械加一套可动外皮。观众在楼下广场 15–25 米外仰视，看到的是剪影与节奏——头在点、身体在晃、嘴在一开一合、麦克风在手里，大脑会自动补完「他在唱歌」。整套机器 1.32 m，全部藏在毛皮里面，站在阳台外看不出身上有机械。"></p>
+    </div>
+    <div class="stats fade">
+      <div><div class="n">1.70<em>m</em></div><div class="t">白熊船长 · 站立总高</div></div>
+      <div><div class="n">1.60<em>m</em></div><div class="t">棕熊海盗 · 站立总高</div></div>
+      <div><div class="n">11<em>个</em></div><div class="t">独立动作 · 约 16 执行器</div></div>
+      <div><div class="n">51<em>件</em></div><div class="t">可打印分件 · 4 个总成</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 角色与外观 ============ -->
+<section id="cast" style="padding-top:0">
+  <div class="inner">
+    <div class="sec-head">
+      <span class="no fade">02 / 角色与舞台</span>
+      <h2 class="grad fade">两个角色，一座城堡</h2>
+      <p class="lead fade">白熊持麦主唱、棕熊吉他伴奏，共用同一套骨架，只换外皮与道具。<b>夜里整栋城堡像一盏灯笼，是最好的免费地标曝光。</b></p>
+    </div>
+    <div class="rows">
+      <div class="row fade">
+        <div class="num">01</div>
+        <div>
+          <h3>白熊船长<span>持麦主唱 · 1.70 m</span></h3>
+          <p>藏青船长制服、望远镜、金色袖章。<b>6 个动作</b>：点头、左右摆头、开嘴口型、持麦臂上举 35°、躯干左右摇 ±6°、呼吸起伏 8 mm。</p>
+        </div>
+      </div>
+      <div class="row fade">
+        <div class="num">02</div>
+        <div>
+          <h3>棕熊海盗<span>吉他伴奏 · 1.60 m</span></h3>
+          <p>红黑条纹头巾、蝴蝶结、船锚胸针、肩上金刚鹦鹉。<b>5 个动作</b>：点头、拨弦 ±12°、按弦 ±10°、躯干侧摆 ±5°、鹦鹉抖翅。</p>
+        </div>
+      </div>
+      <div class="row fade">
+        <div class="num">03</div>
+        <div>
+          <h3>城堡夜舞台<span>江上城堡右侧翼二层阳台</span></h3>
+          <p>暖米黄石材立面 ＋ 三个巨大酒红拱券，夜里灯火通透。<b>观众在广场仰视 25°–30°</b>，正好落在最佳观赏角。</p>
+        </div>
+      </div>
+    </div>
+    <div class="g3 fade">
+      <figure><img src="概念图_城堡版_夜景正面仰视.png"><figcaption>夜景正面仰视 · 位置对应最准（主推）</figcaption></figure>
+      <figure><img src="概念图_城堡版_夜景右前45度.png"><figcaption>夜景右前 45° · 立体感最好</figcaption></figure>
+      <figure><img src="概念图_城堡版_白天正面仰视.png"><figcaption>白天正面仰视 · 形象核对</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 装到熊身上 ============ -->
+<section id="fit" style="padding-top:0">
+  <div class="inner">
+    <div class="sec-head">
+      <span class="no fade">03 / 外皮与驱动</span>
+      <h2 class="grad fade">泡沫雕外皮 · 舵机驱动</h2>
+      <p class="lead fade">外皮用<b>泡沫雕刻成型</b>，内部只留轻骨架，动作交给<b>舵机与小型减速电机</b>——手、嘴巴、眼睛三处就够。观众在 15 米外看的是剪影、配色和动作，皮面精度做到"近看不露怯、远看有神"即可。</p>
+    </div>
+    <div class="g2 fade">
+      <figure><img src="IP分解_白熊_6关节.png"><figcaption>白熊船长 · 需要动的部位：嘴部开合、眼部、持麦手抬升</figcaption></figure>
+      <figure><img src="IP分解_棕熊_5关节.png"><figcaption>棕熊海盗 · 需要动的部位：嘴部、眼部、拨弦手、按弦手</figcaption></figure>
+    </div>
+    <div class="rows" style="margin-top:44px">
+      <div class="row fade">
+        <div class="num">01</div>
+        <div><h3>泡沫雕外皮<span>CNC 雕刻 / 聚氨酯发泡</span></h3>
+          <p>整只熊按体块分件雕坯，翻制玻璃钢或直接批刮补缝、打磨、喷涂植绒。<b>重量比实体模具轻一半以上</b>，阳台楼板负担小，后期改造型也只需重雕那一块。</p></div>
+      </div>
+      <div class="row fade">
+        <div class="num">02</div>
+        <div><h3>三处驱动<span>舵机 ＋ 减速电机</span></h3>
+          <p><b>嘴巴</b>：微型舵机推下颌滑块，开合 0–22 mm。<b>眼睛</b>：舵机带动眼球偏摆或眼睑开合，做"看观众"的效果。<b>手</b>：减速电机竖装在胸腔内向下拉，连杆传动抬臂 0–35°。</p></div>
+      </div>
+      <div class="row fade">
+        <div class="num">03</div>
+        <div><h3>两个不能省的件<span>硬限位 ＋ 自锁刹车</span></h3>
+          <p>户外熊长期受风推和自重，<b>只靠电机软限位一定会烧驱动</b>，每个动作都必须有机械硬限位兜底；电机一律选带自锁刹车型号，<b>停电必须当场锁死</b>，熊倒下来会出事。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 我方交付 ============ -->
+<section id="deliver" style="padding-top:0">
+  <div class="inner">
+    <div class="sec-head">
+      <span class="no fade">04 / 前期设计交付</span>
+      <h2 class="grad fade">先把设计做透，再谈报价</h2>
+      <p class="lead fade">正式造型与施工由有资质的舞台机械厂与道具厂完成；而<b>前期设计这部分我方可以先做掉，几乎零成本，却能让厂家报价收敛 20%–30%</b>，并在造之前就发现会不会穿模、会不会撕皮。</p>
+    </div>
+    <div class="rows">
+      <div class="row fade">
+        <div class="num">01</div>
+        <div><h3>拆件方案<span>已完成</span></h3>
+          <p>整只熊按体块拆成外皮分件、骨架件、驱动关节件，逐件给分缝位置、坯体厚度、雕刻深度、拼接与修补方式——<b>泡沫雕厂家直接照此下刀</b>，也是报价的直接依据。</p></div>
+      </div>
+      <div class="row fade">
+        <div class="num">02</div>
+        <div><h3>动作可行性验证<span>可继续深化</span></h3>
+          <p>在三维里真把 11 个动作跑一遍，查手臂会不会扫到栏杆、皮会不会被顶破、摇摆时肩部会不会撕开、限位够不够——<b>造之前就知道会不会坏</b>。</p></div>
+      </div>
+      <div class="row fade">
+        <div class="num">03</div>
+        <div><h3>动作预览与布局图<span>可继续深化</span></h3>
+          <p>输出几秒动画让客户在还没造之前就看到动起来是什么样；连杆布局图标明马达装哪、连杆怎么连、限位块在哪，画成施工级图纸。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 下一步 ============ -->
+<section id="next" style="padding-top:0">
+  <div class="inner cta">
+    <div class="sec-head" style="margin-bottom:0">
+      <span class="no fade">05 / 下一步</span>
+      <h2 class="grad fade">四件事现在就能启动</h2>
+      <p class="lead fade">这四件事不需要等任何人，越早推进，后面越顺。</p>
+    </div>
+    <div class="grid fade">
+      <div><div class="k">STEP 01</div><h5>楼板六问</h5><p>把楼板厚度、活荷载、能否打锚、排水口、电源、报批六项发给物业/土建。这是最长的一条路径。</p></div>
+      <div><div class="k">STEP 02</div><h5>IP 三视图定稿</h5><p>催客户出正/侧/背三视图＋配色表＋配件清单，明确「等身版」。这是造型与造价的最大变量。</p></div>
+      <div><div class="k">STEP 03</div><h5>外观方向定稿</h5><p>在城堡版夜景三张里挑定主视觉，或再深化一版。定不下来，后面全动不了。</p></div>
+      <div><div class="k">STEP 04</div><h5>对接厂家</h5><p>联系 2–3 家做过 6 个以上动作户外案例的舞台机械厂，先摸清市场，别急着定。</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div>音乐阳台 · 白熊船长 × 棕熊海盗 双角色动态玩偶装置提案</div>
+    <div>泡沫雕外皮 · 舵机驱动 · 手 / 嘴 / 眼 三处动作</div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var vh = window.innerHeight;
+
+  /* 顶部进度条 */
+  var bar = document.getElementById('bar');
+  function barUp(){
+    var h = document.documentElement;
+    var p = h.scrollTop / (h.scrollHeight - h.clientHeight);
+    bar.style.width = (p*100).toFixed(2)+'%';
+  }
+
+  /* 进场动画 */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.fade').forEach(function(el){ io.observe(el); });
+
+  /* 逐字显现 */
+  var revP = document.querySelector('#rev p');
+  if(revP){
+    var t = revP.getAttribute('data-text'), html='';
+    for(var i=0;i<t.length;i++){
+      html += '<span class="ch">'+(t[i]===' '?'&nbsp;':t[i])+'</span>';
+    }
+    revP.innerHTML = html;
+    var chs = revP.querySelectorAll('.ch');
+    function revUp(){
+      var r = revP.getBoundingClientRect();
+      var prog = (vh*0.82 - r.top) / (r.height + vh*0.30);
+      prog = Math.max(0, Math.min(1, prog));
+      var n = Math.floor(prog * chs.length);
+      for(var i=0;i<chs.length;i++){ chs[i].style.opacity = i<n ? 1 : .18; }
+    }
+    window.addEventListener('scroll', revUp, {passive:true}); revUp();
+  }
+
+  /* 跑马灯：随页面滚动横移 */
+  var mq = document.getElementById('mq');
+  var rows = [].slice.call(document.querySelectorAll('.mq-row'));
+  var widths = rows.map(function(r){
+    var imgs = r.querySelectorAll('img');
+    var one = 0; for(var i=0;i<imgs.length/3;i++){ one += imgs[i].getBoundingClientRect().width + 14; }
+    /* 内容复制三份 */
+    var base = r.innerHTML;
+    r.innerHTML = base + base + base;
+    return one;
+  });
+  function mqUp(){
+    var top = mq.getBoundingClientRect().top;
+    var off = (window.scrollY - (window.scrollY + top - vh)) ; /* placeholder */
+    var prog = (vh - top) * 0.28;
+    rows.forEach(function(r, idx){
+      var dir = parseInt(r.getAttribute('data-dir'),10);
+      var w = widths[idx] || 1;
+      var x = (prog * dir) % w;
+      r.style.transform = 'translateX(' + x.toFixed(1) + 'px)';
+    });
+  }
+  window.addEventListener('scroll', mqUp, {passive:true});
+
+  /* 堆叠卡：后一张盖上来时，前一张缩小、变暗 */
+  var cards = [].slice.call(document.querySelectorAll('.cardwrap'));
+  function stackUp(){
+    for(var i=0;i<cards.length-1;i++){
+      var c = cards[i].querySelector('.card');
+      var next = cards[i+1].getBoundingClientRect();
+      var p = Math.max(0, Math.min(1, (vh - next.top) / (vh*0.92)));
+      var s = 1 - p*0.055;
+      c.style.transform = 'scale('+s.toFixed(4)+')';
+      c.style.filter = 'brightness('+(1 - p*0.42).toFixed(3)+')';
+    }
+  }
+
+  function onScroll(){ barUp(); mqUp(); stackUp(); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', function(){ vh = window.innerHeight; onScroll(); });
+  onScroll();
+})();
+</script>
+</body>
+</html>
